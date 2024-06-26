@@ -1,39 +1,33 @@
-@import "./guide.scss";
-
-.app {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: $background-color;
-  font-family: $font-family;
-  color: $text-color; // Ensures all text is easy to read
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
-.container {
-  background: darken(
-    $background-color,
-    5%
-  ); // Slightly darker than the app background
-  padding: $padding-medium;
-  border-radius: $border-radius-medium;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); // Stronger shadow for more depth
-  text-align: center;
-  width: 500px; // Slightly wider container
-  h1 {
-    color: $primary-color;
-    margin-bottom: $padding-medium;
+// App.scss
+.app {
+  font-family: "Arial", sans-serif;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #586364;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #f4f8f3;
   }
-  .search-input {
-    width: 95%;
-    padding: $padding-small;
-    margin-bottom: $padding-medium;
-    border: 1px solid $border-color;
-    border-radius: $border-radius-small;
-    background-color: lighten(
-      $background-color,
-      10%
-    ); // Lighter input background for contrast
-    color: $text-color; // Ensures text is easy to read
+
+  .header {
+    background-color: #63b372;
+    color: #815050;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
   }
 }

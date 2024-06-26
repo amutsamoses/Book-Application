@@ -1,23 +1,40 @@
-@import "../guide.scss";
-.book-form {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: $padding-medium;
-  input {
-    padding: $padding-small;
-    margin-bottom: $margin-small;
-    border: 1px solid $border-color;
-    border-radius: $border-radius-small;
+.form {
+  max-width: 600px;
+  height: auto;
+  margin: 20px auto;
+  padding: 20px;
+  // border: 1px solid #1b3389;
+  border-radius: 5px;
+  background-color: #4e555f;
+
+  .form-group {
+    margin-bottom: 15px;
   }
-  button {
-    padding: $padding-small;
-    color: #fff;
-    background-color: $primary-color;
+  .label {
+    display: flex;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #f3f4f2;
+  }
+
+  .input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  .submitBtn {
+    padding: 10px 20px;
+    color: white;
+    font-weight: 550;
+    background-color: #0c5069;
     border: none;
-    border-radius: $border-radius-small;
+    border-radius: 4px;
     cursor: pointer;
-    &:hover {
-      background-color: darken($primary-color, 10%);
-    }
+    transition: background-color 0.3s;
+  }
+  .submitBtn:hover {
+    background-color: #0056b3;
   }
 }

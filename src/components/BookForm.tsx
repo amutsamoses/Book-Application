@@ -1,41 +1,99 @@
-import React, { useRef } from "react";
-import "../components/bookForm.scss";
+import React, { useState, FormEvent, useEffect } from "react";
+import "./bookForm.scss";
 
-interface BookFormProps {
-  onAddBook: (book: { title: string; author: string; year: number }) => void;
+interface Book {
+  id: number;
+  title: string;
+  author: string;
+  year: string;
 }
 
-const BookForm: React.FC<BookFormProps> = ({ onAddBook }) => {
-  const titleRef = useRef<HTMLInputElement>(null);
-  const authorRef = useRef<HTMLInputElement>(null);
-  const yearRef = useRef<HTMLInputElement>(null);
+interface BookFormProps {
+  onSubmit: (book: Book) => void;
+  initialData?: Book | null;
+}
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    const title = titleRef.current?.value || "";
-    const author = authorRef.current?.value || "";
-    const year = parseInt(yearRef.current?.value || "0");
-    if (title && author && year) {
-      onAddBook({ title, author, year });
-      if (titleRef.current) titleRef.current.value = "";
-      if (authorRef.current) authorRef.current.value = "";
-      if (yearRef.current) yearRef.current.value = "";
+function BookForm({ onSubmit, initialData }: BookFormProps): JSX.Element {
+  // Initialize form state with initialData or blank fields
+  const [book, setBook] = useState<Book>({
+    id: 0,
+    title: "",
+    author: "",
+    year: "",
+  });
+
+  // Effect to set initial data when the form is to edit an existing book
+  useEffect(() => {
+    if (initialData) {
+      setBook(initialData);
+    } else {
+      setBook({ id: 0, title: "", author: "", year: "" }); // Reset form when not editing
     }
+  }, [initialData]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setBook((prevBook) => ({ ...prevBook, [name]: value }));
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit(book);
+    setBook({ id: 0, title: "", author: "", year: "" }); // Reset form after submit
   };
 
   return (
-    <form className="book-form" onSubmit={handleSubmit}>
-      <input type="text" ref={titleRef} placeholder="Title" required />
-      <input type="text" ref={authorRef} placeholder="Author" required />
-      <input
-        type="number"
-        ref={yearRef}
-        placeholder="Publication Year"
-        required
-      />
-      <button type="submit">Add Book</button>
+    <form onSubmit={handleSubmit} className="form">
+      <h2>Add Book</h2>
+      <div className="form-group">
+        <label htmlFor="title" className="label">
+          Title
+        </label>
+        <input
+          id="title"
+          type="text"
+          name="title"
+          value={book.title}
+          onChange={handleChange}
+          className="input"
+          required
+          aria-label="Book Title"
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="author" className="label">
+          Author
+        </label>
+        <input
+          id="author"
+          type="text"
+          name="author"
+          value={book.author}
+          onChange={handleChange}
+          className="input"
+          required
+          aria-label="Author Name"
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="year" className="label">
+          Publication Year
+        </label>
+        <input
+          id="year"
+          type="text"
+          name="year"
+          value={book.year}
+          onChange={handleChange}
+          className="input"
+          required
+          aria-label="Publication Year"
+        />
+      </div>
+      <button type="submit" className="submitBtn">
+        Submit
+      </button>
     </form>
   );
-};
-
+}
 export default BookForm;

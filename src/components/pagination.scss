@@ -1,25 +1,26 @@
-@import "../guide.scss";
-
 .pagination {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Center pagination controls */
   align-items: center;
-  button {
-    padding: $padding-small $padding-medium;
-    color: #fff;
-    background-color: $primary-color;
-    border: none;
-    border-radius: $border-radius-small;
-    cursor: pointer;
-    &:hover {
-      background-color: darken($primary-color, 10%);
-    }
-    &:disabled {
-      background-color: #bdc3c7;
-      cursor: not-allowed;
-    }
-  }
-  span {
-    font-size: 16px;
-  }
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 16px; /* More readable button size */
+  margin: 0 10px; /* Space out the buttons */
+  background-color: #1a2938; /* A more vibrant button color */
+  color: rgb(17, 15, 15);
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth color transition */
+}
+
+.pagination button:disabled {
+  background-color: #292020; /* Disabled state */
+  cursor: default;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #25415f; /* Hover state */
 }

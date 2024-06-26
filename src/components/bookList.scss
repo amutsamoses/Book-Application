@@ -1,33 +1,53 @@
-@import "../guide.scss";
-.book-list {
+.bookList {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: $padding-medium;
-  th,
-  td {
-    padding: $padding-small;
-    border: 1px solid $border-color;
-    text-align: left;
-  }
-  th {
-    background-color: $primary-color;
-    color: #fff;
-  }
-  button {
-    padding: 5px 10px;
-    margin-right: 5px;
-    color: #fff;
-    background-color: $secondary-color;
-    border: none;
-    border-radius: $border-radius-small;
-    cursor: pointer;
-    &:hover {
-      background-color: darken($secondary-color, 10%);
+  margin: 20px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Adds subtle shadow for depth
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; // Ensures spacing between elements
+
+    th,
+    td {
+      padding: 12px 15px; // More generous padding for readability
+      border-bottom: 1px solid #ddd; // Lighter border for a softer look
+      text-align: left;
     }
-    &:last-child {
-      background-color: $danger-color;
+
+    th {
+      background-color: #f4f4f4; // Keeps a neutral header background
+      font-size: 16px; // Larger font size for better visibility
+    }
+
+    tbody tr:hover {
+      background-color: #acb5be; // Adds a hover effect to table rows
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center; // Centers pagination controls
+    padding: 20px 0; // Padding around the pagination for better spacing
+
+    button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      background-color: #0d7bea;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
       &:hover {
-        background-color: darken($danger-color, 10%);
+        background-color: #0056b3;
+      }
+
+      &:disabled {
+        background-color: #ccc;
+        color: #666;
+        cursor: not-allowed;
       }
     }
   }

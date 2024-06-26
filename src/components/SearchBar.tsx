@@ -1,27 +1,32 @@
-// SearchBar.tsx
-import React from "react";
+import React, { useState } from "react";
+import { SearchProps } from "../types/BookTypes";
 import "./searchBar.scss";
 
-interface SearchBarProps {
-  searchTerm: string;
-  onSearchChange: (newSearchTerm: string) => void;
-}
+function SearchBar({ onSearch }: SearchProps) {
+  const [searchTerm, setSearchTerm] = useState("");
 
-const SearchBar: React.FC<SearchBarProps> = ({
-  searchTerm,
-  onSearchChange,
-}) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchClick = () => {
+    onSearch(searchTerm); // Trigger the search action passed from the parent component
+  };
+
   return (
-    <div className="search-bar">
+    <div className="search">
       <input
         type="text"
-        placeholder="Search by title"
+        placeholder="Search books..."
         value={searchTerm}
-        onChange={(e) => onSearchChange(e.target.value)}
+        onChange={handleInputChange}
         className="search-input"
       />
+      <button onClick={handleSearchClick} className="search-button">
+        Search
+      </button>
     </div>
   );
-};
+}
 
 export default SearchBar;

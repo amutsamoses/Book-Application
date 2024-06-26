@@ -1,89 +1,55 @@
-import React, { useReducer, useCallback, useEffect, useState } from "react";
+import React from "react";
 import BookForm from "./components/BookForm";
 import BookList from "./components/BookList";
-import Pagination from "./components/Pagination";
-import { useLocalStorage } from "./hooks/useLocalStorage";
-import bookReducer from "./hooks/useBookReducer";
+import SearchBar from "./components/SearchBar";
+import useLocalStorage from "./hooks/useLocalStorage";
 import { Book } from "./types/BookTypes";
+
 import "./App.scss";
 
-const App: React.FC = () => {
-  const [books, dispatch] = useReducer(bookReducer, []);
-  const [storedBooks, setStoredBooks] = useLocalStorage("books", []);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+function App() {
+  // Declare the use of useLocalStorage with the Book array type
+  const [books, setBooks] = useLocalStorage<Book[]>("books", []);
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [editBook, setEditBook] = React.useState<Book | null>(null);
 
-  const booksPerPage = 2;
-  const totalPages = Math.ceil(books.length / booksPerPage);
-
-  useEffect(() => {
-    if (storedBooks.length > 0) {
-      dispatch({ type: "INITIAL_LOAD", books: storedBooks });
+  const handleFormSubmit = (book: Book) => {
+    if (editBook && books.some((b) => b.id === book.id)) {
+      setBooks(books.map((b) => (b.id === book.id ? book : b)));
+    } else {
+      const newBook = { ...book, id: Math.random() }; // Ensure unique ID for new books
+      setBooks([...books, newBook]);
     }
-  }, [storedBooks]);
-
-  useEffect(() => {
-    setStoredBooks(books);
-  }, [books, setStoredBooks]);
-
-  const addBook = (book: { title: string; author: string; year: number }) => {
-    const newBook = { ...book, id: Date.now() };
-    dispatch({
-      type: "ADD_BOOK",
-      book: { ...newBook, year: newBook.year.toString() },
-    });
+    setEditBook(null); // Reset edit book after submitting
   };
 
-  const editBook = (updatedBook: Book) => {
-    dispatch({ type: "UPDATE_BOOK", book: updatedBook });
+  const handleDelete = (bookId: number) => {
+    setBooks(books.filter((book) => book.id !== bookId));
   };
 
-  const deleteBook = (id: number) => {
-    dispatch({ type: "DELETE_BOOK", id });
+  const handleEdit = (book: Book) => {
+    setEditBook(book);
   };
 
-  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  }, []);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
 
   const filteredBooks = books.filter((book) =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase())
+    book.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const paginatedBooks = filteredBooks.slice(
-    (currentPage - 1) * booksPerPage,
-    currentPage * booksPerPage
-  );
-
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-  }, []);
 
   return (
     <div className="app">
-      <div className="container">
-        <h1>Book Repository</h1>
-        <BookForm onAddBook={addBook} />
-        <input
-          type="text"
-          placeholder="Search by title"
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-input"
-        />
-        <BookList
-          books={paginatedBooks}
-          onEditBook={editBook}
-          onDeleteBook={deleteBook}
-        />
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
+      <SearchBar onSearch={handleSearch} />
+      <BookForm onSubmit={handleFormSubmit} initialData={editBook} />
+      <BookList
+        books={filteredBooks}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     </div>
   );
-};
+}
 
 export default App;

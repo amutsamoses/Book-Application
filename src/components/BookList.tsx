@@ -1,49 +1,57 @@
-import React from "react";
-import "../components/bookList.scss";
-
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-  year: string;
-}
+import { useState } from "react";
+import AddBook from "./AddBook";
+import Pagination from "./Pagination";
+import { Book } from "../types/BookTypes";
+import "./bookList.scss";
 
 interface BookListProps {
   books: Book[];
-  onEditBook: (book: Book) => void;
-  onDeleteBook: (id: number) => void;
+  onEdit: (book: Book) => void;
+  onDelete: (bookId: number) => void;
 }
 
-const BookList: React.FC<BookListProps> = ({
-  books,
-  onEditBook,
-  onDeleteBook,
-}) => {
+const BOOKS_PER_PAGE = 4;
+
+function BookList({ books, onEdit, onDelete }: BookListProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(books.length / BOOKS_PER_PAGE);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+  const selectedBooks = books.slice(startIndex, startIndex + BOOKS_PER_PAGE);
+
   return (
-    <table className="book-list">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Year</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {books.map((book) => (
-          <tr key={book.id}>
-            <td>{book.title}</td>
-            <td>{book.author}</td>
-            <td>{book.year}</td>
-            <td>
-              <button onClick={() => onEditBook(book)}>Edit</button>
-              <button onClick={() => onDeleteBook(book.id)}>Delete</button>
-            </td>
+    <div className="bookList">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Year</th>
+            <th>Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {selectedBooks.map((book) => (
+            <AddBook
+              key={book.id}
+              book={book}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          ))}
+        </tbody>
+      </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+    </div>
   );
-};
+}
 
 export default BookList;
